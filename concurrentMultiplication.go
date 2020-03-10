@@ -2,29 +2,34 @@ package main
 
 import (
 	"fmt"
-	"time"
+	"sync"
 )
 
-//var wg sync.WaitGroup
+var wg sync.WaitGroup
 
 func main() {
 	ch := make(chan string, 30)
-	//wg.Add(2)
+	wg.Add(12)
 	for i := 1; i <= 12; i++ {
 		go timestable(i, ch)
 	}
 	// Receive values from ch until closed.
-	for v := range ch {
-		fmt.Println(v)
-	}
-	//wg.Wait()
+	go display(ch)
+	wg.Wait()
+	defer close(ch)
+
 }
 
 func timestable(x int, ch chan string) {
 	for i := 1; i <= 12; i++ {
 		ch <- fmt.Sprintf("%d x %d = "+"%d\n", i, x, x*i)
-		time.Sleep(time.Millisecond * 500)
+		//time.Sleep(time.Millisecond * 500)
 	}
-	//wg.Done()
-	close(ch)
+	defer wg.Done()
+}
+
+func display(ch chan string){
+	for v := range ch {
+		fmt.Println(v)
+	}
 }
