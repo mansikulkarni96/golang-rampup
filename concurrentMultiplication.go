@@ -10,8 +10,9 @@ import (
 func main() {
 	ch := make(chan string, 30)
 	//wg.Add(2)
-	go timestable(2, ch)
-	go timestable(3, ch)
+	for i := 1; i <= 12; i++ {
+		go timestable(i, ch)
+	}
 	// Receive values from ch until closed.
 	for v := range ch {
 		fmt.Println(v)
