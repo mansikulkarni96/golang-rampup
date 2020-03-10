@@ -2,14 +2,15 @@ package main
 
 import (
 	"fmt"
+	"sync"
 )
-
+var sg sync.WaitGroup
 func main() {
 	for n := 2; n <= 12; n++ {
-		wg.Add(1)
+		sg.Add(1)
 		go timetable(n)
 	}
-	wg.Wait()
+	sg.Wait()
 }
 
 func timetable(x int) {
@@ -17,5 +18,5 @@ func timetable(x int) {
 		fmt.Printf("%d x %d = %d\n", i, x, x*i)
 
 	}
-	wg.Done()
+	sg.Done()
 }
