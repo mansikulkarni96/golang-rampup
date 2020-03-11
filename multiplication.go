@@ -9,10 +9,8 @@ var wg sync.WaitGroup
 
 func main() {
 	ch := make(chan string)
-	for i := 1; i <= 12; i++ {
-		wg.Add(1)
-		go tables(i, ch)
-	}
+	wg.Add(1)
+	go tables(2, ch)
 	// Receive values from ch until closed.
 	go display(ch)
 	wg.Wait()
@@ -21,8 +19,8 @@ func main() {
 }
 
 func tables(x int, ch chan string) {
-	for i := 1; i <= 12; i++ {
-		ch <- fmt.Sprintf("%d x %d = "+"%d\n", i, x, x*i)
+	for i := 1; i <= 10; i++ {
+		ch <- fmt.Sprintf("%d x %d = "+"%d\n", x, i, x*i)
 	}
 	defer wg.Done()
 }
